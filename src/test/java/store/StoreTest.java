@@ -2,6 +2,7 @@ package store;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import store.model.Product;
 import store.model.Store;
 import store.service.StoreService;
 
@@ -54,5 +55,17 @@ public class StoreTest {
         assertSimpleTest(() ->
                 assertThat(store.checkStock(productName, 16))
                         .isFalse());
+    }
+
+    @DisplayName("제품 구매에 따른 재고 업데이트 확인")
+    @Test
+    void 재고_업데이트_확인() {
+        String productName = "물";
+        Product product = new Product(productName, 500, 10, "");
+        assertSimpleTest(() -> {
+            store.purchase(product);
+            assertThat(store.checkStock(productName, 1))
+                    .isFalse();
+        });
     }
 }
