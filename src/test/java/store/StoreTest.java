@@ -34,4 +34,25 @@ public class StoreTest {
                 assertThat(store.getPromotionByName("탄산3+2"))
                         .isEqualTo(null));
     }
+
+    @DisplayName("제품이 존재하는 지 확인")
+    @Test
+    void 제품이_존재하는_지_확인() {
+        String productName = "사이다";
+        assertSimpleTest(() ->
+                assertThat(store.checkProduct(productName))
+                        .isTrue());
+    }
+
+    @DisplayName("재고가 충분한 지 확인")
+    @Test
+    void 재고가_충분한_지_확인() {
+        String productName = "사이다";
+        assertSimpleTest(() ->
+                assertThat(store.checkStock(productName, 1))
+                        .isTrue());
+        assertSimpleTest(() ->
+                assertThat(store.checkStock(productName, 16))
+                        .isFalse());
+    }
 }
