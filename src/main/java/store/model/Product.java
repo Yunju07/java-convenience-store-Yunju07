@@ -46,10 +46,6 @@ public class Product {
         this.promotion = promotion;
     }
 
-    public void setGetYn(String getYn) {
-        this.getYn = getYn;
-    }
-
     public void increaseQuantity(Integer quantity) {
         this.quantity += quantity;
     }
