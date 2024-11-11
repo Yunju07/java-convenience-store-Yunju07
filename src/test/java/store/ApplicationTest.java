@@ -2,6 +2,7 @@ package store;
 
 import camp.nextstep.edu.missionutils.test.NsTest;
 import org.junit.jupiter.api.Test;
+import store.enums.ErrorMessage;
 
 import java.time.LocalDate;
 
@@ -58,6 +59,29 @@ class ApplicationTest extends NsTest {
         assertSimpleTest(() -> {
             runException("[컵라면-12]", "N", "N");
             assertThat(output()).contains("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 예외_테스트_구매_형식() {
+        assertSimpleTest(() -> {
+            runException("(컵라면-1)");
+            assertThat(output()).contains(ErrorMessage.INVALID_PRODUCT_QUANTITY_ERROR.getMessage());
+        });
+    }
+
+    @Test
+    void 예외_테스트_존재하지_않는_제품() {
+        assertSimpleTest(() -> {
+            runException("[제로콜라-1]");
+            assertThat(output()).contains(ErrorMessage.NONEXISTENT_PRODUCT_ERROR.getMessage());
+        });
+    }
+    @Test
+    void 예외_테스트_잘못된_YN_입력() {
+        assertSimpleTest(() -> {
+            runException("[콜라-1]", "y");
+            assertThat(output()).contains(ErrorMessage.OTHER_ERROR.getMessage());
         });
     }
 
