@@ -37,7 +37,7 @@ public class StoreController {
         this.discountService = new DiscountService(inputView, outputView, storeConverter);
     }
     public void start() {
-        Store store = loadStoreInfo();
+        Store store = storeService.loadStoreInfo();
 
         while (true) {
             informCurrentStock(store.getStock());
@@ -47,14 +47,10 @@ public class StoreController {
         }
     }
 
-    private Store loadStoreInfo() {
-        List<Product> products= storeService.loadProducts();
-        List<Promotion> promotions = storeService.loadPromotions();
-        Store store = new Store(products, promotions);
-
-        store = storeService.addOutOfStockProduct(store);
-
-        return store;
+    private void informCurrentStock(List<Product> stock) {
+        // 환영 인사 및 재고 안내
+        CurrentStrockDTO dto = storeConverter.convertToCurrentProductDTO(stock);
+        outputView.printCurrentProducts(dto);
     }
 
     private boolean purchase(Store store) {
@@ -68,12 +64,6 @@ public class StoreController {
         payment(purcasedProducts, membership);
 
         return inputAdditionalPurchase();
-    }
-
-    private void informCurrentStock(List<Product> stock) {
-        // 환영 인사 및 재고 안내
-        CurrentStrockDTO dto = storeConverter.convertToCurrentProductDTO(stock);
-        outputView.printCurrentProducts(dto);
     }
 
     private List<ProductDTO> inputProductPurchase(Store store) {

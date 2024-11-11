@@ -14,18 +14,15 @@ import java.util.*;
 public class StoreService {
     private final static String PRODUCTS_FILE_PATH = "src/main/resources/products.md";
     private final static String PROMOTIONS_FILE_PATH = "src/main/resources/promotions.md";
-    public List<Product> loadProducts() {
-        List<Product> products = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File(PRODUCTS_FILE_PATH))) {
-            scanner.nextLine();
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                products.add(parseProduct(line));
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return products;
+
+    public Store loadStoreInfo() {
+        List<Product> products= loadProducts();
+        List<Promotion> promotions = loadPromotions();
+        Store store = new Store(products, promotions);
+
+        store = addOutOfStockProduct(store);
+
+        return store;
     }
 
     public Store addOutOfStockProduct(Store store){
@@ -40,7 +37,21 @@ public class StoreService {
         return store;
     }
 
-    public List<Promotion> loadPromotions() {
+    private List<Product> loadProducts() {
+        List<Product> products = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(PRODUCTS_FILE_PATH))) {
+            scanner.nextLine();
+            while (scanner.hasNext()) {
+                String line = scanner.nextLine();
+                products.add(parseProduct(line));
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    private List<Promotion> loadPromotions() {
         List<Promotion> promotions = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(PROMOTIONS_FILE_PATH))) {
             scanner.nextLine();
